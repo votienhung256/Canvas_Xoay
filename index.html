@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="board" width="400px" height="400px" style="border: 1px solid black;"></canvas>
+  <script>
+    let DEGREE = 2 * Math.PI / 360
+
+    let canvas = document.getElementById("board")
+    let brush = canvas.getContext("2d")
+    brush.translate(200, 200)
+
+    let starship = new Starship(10, 10, 50, 50)
+    draw(starship)
+
+    function Starship(x, y, w, h) {
+      let xPos = x
+      let yPos = y
+      let width = w
+      let heigh = h
+      let incline = 0
+
+      this.getX = function() {
+        return xPos
+      }
+
+      this.getY = function() {
+        return yPos
+      }
+
+      this.getWidth = function() {
+        return width
+      }
+
+      this.getHeigh = function() {
+        return heigh
+      }
+
+      this.moveRight = function() {
+        xPos += 10
+      }
+
+      this.getIncline = function() {
+        return incline * DEGREE
+      }
+
+      setInterval(function() {
+        incline++
+      }, 1000 / 240)
+    }
+
+    window.requestAnimationFrame(redrawUniversity)
+    function redrawUniversity() {
+      brush.clearRect(-200, -200, 400, 400)
+      draw(starship)
+      window.requestAnimationFrame(redrawUniversity)
+    }
+
+    function draw(ship) {
+      brush.rotate(ship.getIncline());
+      brush.beginPath()
+      brush.rect(ship.getX() - ship.getWidth() / 2, ship.getY() - ship.getHeigh() / 2, ship.getWidth(), ship.getHeigh());
+      brush.rect(ship.getX() - ship.getWidth() / 4, ship.getY() - ship.getHeigh() / 4, ship.getWidth() / 2, ship.getHeigh() / 2);
+      brush.stroke()
+      brush.rotate(-ship.getIncline());
+    }
+  </script>
+</body>
+
+</html>
